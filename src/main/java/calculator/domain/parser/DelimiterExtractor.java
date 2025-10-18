@@ -1,0 +1,34 @@
+package calculator.domain.parser;
+
+import calculator.domain.delimiter.CustomDelimiter;
+
+import java.util.Optional;
+
+public class DelimiterExtractor {
+    private static final String CUSTOM_DELIMITER_PREFIX = "//";
+    private static final String CUSTOM_DELIMITER_SUFFIX = "\\n";
+
+    public Optional<CustomDelimiter> extract(String input) {
+        if (!hasCustomDelimiter(input)) {
+            return Optional.empty();
+        }
+
+        String delimiterChar = extractDelimiterChar(input);
+        return Optional.of(new CustomDelimiter(delimiterChar));
+    }
+
+    private boolean hasCustomDelimiter(String input) {
+        return input.startsWith(CUSTOM_DELIMITER_PREFIX);
+    }
+
+    private String extractDelimiterChar(String input) {
+        int start = CUSTOM_DELIMITER_PREFIX.length();
+        int end = input.indexOf(CUSTOM_DELIMITER_SUFFIX);
+        return input.substring(start, end);
+    }
+
+    public String removeDelimiterPrefix(String input) {
+        int delimiterEndIndex = input.indexOf(CUSTOM_DELIMITER_SUFFIX);
+        return input.substring(delimiterEndIndex + CUSTOM_DELIMITER_SUFFIX.length());
+    }
+}
